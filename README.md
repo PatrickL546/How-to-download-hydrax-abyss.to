@@ -75,8 +75,6 @@ Looking at the [bundle.min.js](https://iamcdn.net/players/bundle.min.js). It sho
 
 - Combine the video cdn `https://sfbhnfiy1.globalcdn39.one/` with the prefix+video file name `whw`+`ce0f5de002c90461a9` = `https://sfbhnfiy1.globalcdn39.one/whwce0f5de002c90461a9`
 
-- You can ignore `#timestamp=`+unix time. If you want to have the timestamp, it looks like this `https://sfbhnfiy1.globalcdn39.one/whwce0f5de002c90461a9#timestamp=1710410059769`
-
 Here's an example Python code that downloads each video source
 
 ```Python
@@ -94,8 +92,7 @@ response = requests.get(url_720p, headers=headers)
 with open("video_720p.mp4", "wb") as f:
     f.write(response.content)
 
-#  It works without the timestamp but here's an example with one
-url_1080p = "https://sfbhnfiy1.globalcdn39.one/whwce0f5de002c90461a9#timestamp=1710410059769"
+url_1080p = "https://sfbhnfiy1.globalcdn39.one/whwce0f5de002c90461a9"
 response = requests.get(url_1080p, headers=headers)
 with open("video_1080p.mp4", "wb") as f:
     f.write(response.content)
@@ -120,10 +117,7 @@ quality_prefix = "whw"
 # video_file_name. ie. "ce0f5de002c90461a9".  Do not copy .txt
 video_file_name = "<video_file_name>"
 
-# OPTIONAL. timestamp unix time. ie. "#timestamp=1710410059769"
-timestamp = ""
-
-url = f"{videocdn_url}{quality_prefix}{video_file_name}{timestamp}"
+url = f"{videocdn_url}{quality_prefix}{video_file_name}"
 response = requests.get(url, headers=headers)
 with open("video.mp4", "wb") as f:
     f.write(response.content)

@@ -1,8 +1,10 @@
-# [Recommended. Download zip](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/blob/master/Recommended.%20Download%20zip.md)
-
-# [How to create modified .js scripts](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/blob/master/How%20to%20create%20modified%20.js%20scripts.md)
+# New method
 
 # Guide
+
+## Install requirements.txt
+
+`pip install -r requirements.txt`
 
 Not all websites use the same links so you'll have to adapt to that. Hope this helps!
 
@@ -21,7 +23,84 @@ Not all websites use the same links so you'll have to adapt to that. Hope this h
 
 ![image](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/assets/75874561/1f8eddd0-c20a-4188-87d1-4ede5ad74090)
 
-### Anti-debug bypass, working on chrome
+### Anti-debug bypass
+
+- If a website has anti-debug, turn this on to bypass it and reload
+
+![image](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/assets/75874561/1ad57d58-6fd8-41c8-9736-6ee7060d16d5)
+
+### Find cdn ID
+
+- Click the Doc filter to find cdn ID URL. Use filter `?v=`
+
+![image](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/assets/75874561/160b0a0c-7b7b-4f48-b6c4-0a2dd3405d1b)
+
+- Get cdn ID. `VswFqVUmq`. ID should be 9 characters
+
+![image](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/assets/75874561/a63f88d6-4e6f-4237-bfe0-1692d1a3d315)
+
+# Download
+
+```Python
+from base64 import b64decode
+from requests import get
+from json import loads
+from re import search
+
+# cdn_ID. ie. "VswFqVUmq". Note: ID should be 9 characters
+cdn_ID = "<cdn_ID>"
+
+# leave empty for 360p
+# add "www" for 720p
+# add "whw" for 1080p
+# if 1080p is not available, it will use the next highest quality
+q_prefix = "whw"
+
+domain, vid_id, sources = [loads(b64decode(search(r'PLAYER\(atob\("(.*?)"', get(f"https://abysscdn.com/?v={cdn_ID}").text).group(1)))[i] for i in ["domain","id","sources"]]
+
+print(f"""360p  =  " "  = "sd", "mHd"
+720p  = "www" = "hd"
+1080p = "whw" = "fullHd"
+
+Available sources {sources}
+Downloading "{q_prefix}" or next highest source available
+""")
+
+response = get(f"https://{domain}/{q_prefix}{vid_id}", headers={"Referer": f"https://abysscdn.com/?v={cdn_ID}"})
+with open("video.mp4", "wb") as f:
+    f.write(response.content)
+```
+
+# Old method
+
+# [Recommended. Download zip](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/blob/master/Recommended.%20Download%20zip.md)
+
+# [How to create modified .js scripts](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/blob/master/How%20to%20create%20modified%20.js%20scripts.md)
+
+# Guide
+
+## Install requirements.txt
+
+`pip install -r requirements.txt`
+
+Not all websites use the same links so you'll have to adapt to that. Hope this helps!
+
+- Browser: Chrome
+- Test: https://gojo2.xyz/asre-zero-224-pised/
+- Password: nade
+- Method also tested on https://voircartoon.com/, https://animet.net/, https://vlist.se/hydrax.html#OHBuc0c4VE41
+
+### Dev tools bypass
+
+- Since this website block right-click or F12, you'll have to find it in the menu
+
+![image](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/assets/75874561/2a1f9464-bd91-452a-a868-d4ac407e253a)
+
+- Or use an [extension](https://chromewebstore.google.com/detail/absolute-enable-right-cli/jdocbkpgdakpekjlhemmfcncgdjeiika)
+
+![image](https://github.com/PatrickL546/How-to-download-hydrax-abyss.to/assets/75874561/1f8eddd0-c20a-4188-87d1-4ede5ad74090)
+
+### Anti-debug bypass
 
 - If a website has anti-debug, turn this on to bypass it and reload
 
@@ -78,22 +157,22 @@ Looking at the [bundle.min.js](https://iamcdn.net/players/bundle.min.js). It sho
 Here's an example Python code that downloads each video source
 
 ```Python
-import requests
+from requests import get
 
 headers = {"Referer": "https://abysscdn.com/?v=VswFqVUmq"}
 
 url_360p = "https://sfbhnfiy1.globalcdn39.one/ce0f5de002c90461a9"
-response = requests.get(url_360p, headers=headers)
+response = get(url_360p, headers=headers)
 with open("video_360p.mp4", "wb") as f:
     f.write(response.content)
 
 url_720p = "https://sfbhnfiy1.globalcdn39.one/wwwce0f5de002c90461a9"
-response = requests.get(url_720p, headers=headers)
+response = get(url_720p, headers=headers)
 with open("video_720p.mp4", "wb") as f:
     f.write(response.content)
 
 url_1080p = "https://sfbhnfiy1.globalcdn39.one/whwce0f5de002c90461a9"
-response = requests.get(url_1080p, headers=headers)
+response = get(url_1080p, headers=headers)
 with open("video_1080p.mp4", "wb") as f:
     f.write(response.content)
 ```
@@ -101,7 +180,7 @@ with open("video_1080p.mp4", "wb") as f:
 Here's an empty template
 
 ```Python
-import requests
+from requests import get
 
 # referrer_url. ie. "https://abysscdn.com/?v=VswFqVUmq". Note: It will not always look like this
 headers = {"Referer": "<referrer_url>"}
@@ -112,13 +191,14 @@ videocdn_url = "https://" + "<videocdn_url>"
 # leave empty for 360p
 # add "www" for 720p
 # add "whw" for 1080p
+# if 1080p is not available, it will use the next highest quality
 quality_prefix = "whw"
 
 # video_file_name. ie. "ce0f5de002c90461a9".  Do not copy .txt
 video_file_name = "<video_file_name>"
 
 url = f"{videocdn_url}{quality_prefix}{video_file_name}"
-response = requests.get(url, headers=headers)
+response = get(url, headers=headers)
 with open("video.mp4", "wb") as f:
     f.write(response.content)
 ```

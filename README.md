@@ -47,8 +47,8 @@ from requests import get
 from json import loads
 from re import search
 
-# cdn_ID. ie. "VswFqVUmq". Note: ID should be 9 characters
-cdn_ID = "<cdn_ID>"
+print('cdn_ID. ie. "?v=VswFqVUmq" without "?v=". Note: ID should be 9 characters')
+cdn_ID = input("Enter cdn_ID: ")
 
 # leave empty for 360p
 # add "www" for 720p
@@ -58,7 +58,8 @@ q_prefix = "whw"
 
 domain, vid_id, sources = [loads(b64decode(search(r'PLAYER\(atob\("(.*?)"', get(f"https://abysscdn.com/?v={cdn_ID}").text).group(1)))[i] for i in ["domain","id","sources"]]
 
-print(f"""360p  =  " "  = "sd", "mHd"
+print(f"""
+360p  =  " "  = "sd", "mHd"
 720p  = "www" = "hd"
 1080p = "whw" = "fullHd"
 

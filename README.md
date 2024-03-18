@@ -66,9 +66,10 @@ Available sources {sources}
 Downloading "{q_prefix}" or next highest source available
 """)
 
-response = get(f"https://{domain}/{q_prefix}{vid_id}", headers={"Referer": f"https://abysscdn.com/?v={cdn_ID}"})
-with open("video.mp4", "wb") as f:
-    f.write(response.content)
+response = get(f"https://{domain}/{q_prefix}{vid_id}", headers={"Referer": f"https://abysscdn.com/?v={cdn_ID}"}, stream=True)
+with open(f"{cdn_ID}.mp4", "wb") as f:
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
 ```
 
 # Old method
@@ -162,19 +163,22 @@ from requests import get
 headers = {"Referer": "https://abysscdn.com/?v=VswFqVUmq"}
 
 url_360p = "https://sfbhnfiy1.globalcdn39.one/ce0f5de002c90461a9"
-response = get(url_360p, headers=headers)
+response = get(url_360p, headers=headers, stream=True)
 with open("video_360p.mp4", "wb") as f:
-    f.write(response.content)
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
 
 url_720p = "https://sfbhnfiy1.globalcdn39.one/wwwce0f5de002c90461a9"
-response = get(url_720p, headers=headers)
+response = get(url_720p, headers=headers, stream=True)
 with open("video_720p.mp4", "wb") as f:
-    f.write(response.content)
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
 
 url_1080p = "https://sfbhnfiy1.globalcdn39.one/whwce0f5de002c90461a9"
-response = get(url_1080p, headers=headers)
+response = get(url_1080p, headers=headers, stream=True)
 with open("video_1080p.mp4", "wb") as f:
-    f.write(response.content)
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
 ```
 
 Here's an empty template
@@ -198,7 +202,8 @@ quality_prefix = "whw"
 video_file_name = "<video_file_name>"
 
 url = f"{videocdn_url}{quality_prefix}{video_file_name}"
-response = get(url, headers=headers)
-with open("video.mp4", "wb") as f:
-    f.write(response.content)
+response = get(url, headers=headers, stream=True)
+with open(f"{video_file_name}.mp4", "wb") as f:
+    for chunk in response.iter_content(chunk_size=8192):
+        f.write(chunk)
 ```

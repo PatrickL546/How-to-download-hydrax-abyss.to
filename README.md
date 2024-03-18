@@ -65,6 +65,7 @@ print(f"""
 
 Available sources {sources}
 Downloading "{q_prefix}" or next highest source available
+Please wait...
 """)
 
 response = get(f"https://{domain}/{q_prefix}{vid_id}", headers={"Referer": f"https://abysscdn.com/?v={cdn_ID}"}, stream=True)

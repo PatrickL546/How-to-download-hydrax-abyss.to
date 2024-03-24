@@ -43,12 +43,14 @@ Not all websites use the same links so you'll have to adapt to that. Hope this h
 
 ```Python
 from base64 import b64decode
-from os.path import isfile 
+from os.path import isfile
 from requests import get
 from json import loads
 from re import search
 
-print('cdn_ID. ie. "?v=VswFqVUmq" without "?v=". Note: ID should be 9 characters. Separate ID with comma ","')
+print(
+    'cdn_ID. ie. "?v=VswFqVUmq" without "?v=". Note: ID should be 9 characters. Separate ID with comma ","'
+)
 cdn_ID_list = set([i.strip() for i in input("Enter cdn_ID: ").split(",")])
 
 # leave empty for 360p
@@ -63,7 +65,17 @@ for cdn_ID in cdn_ID_list:
         if isfile(f"./{cdn_ID}.mp4"):
             print(f"{cdn_ID}.mp4 already exists")
         else:
-            domain, vid_id, sources = [loads(b64decode(search(r'PLAYER\(atob\("(.*?)"', get(f"https://abysscdn.com/?v={cdn_ID}").text).group(1)))[i] for i in ["domain","id","sources"]]
+            domain, vid_id, sources = [
+                loads(
+                    b64decode(
+                        search(
+                            r'PLAYER\(atob\("(.*?)"',
+                            get(f"https://abysscdn.com/?v={cdn_ID}").text,
+                        ).group(1)
+                    )
+                )[i]
+                for i in ["domain", "id", "sources"]
+            ]
 
             print(f"""
 360p  =  " "  = "sd", "mHd"
@@ -75,7 +87,11 @@ Downloading "{cdn_ID}.mp4" in quality "{q_prefix}" or next highest source availa
 Please wait...
 """)
 
-            response = get(f"https://{domain}/{q_prefix}{vid_id}", headers={"Referer": f"https://abysscdn.com/?v={cdn_ID}"}, stream=True)
+            response = get(
+                f"https://{domain}/{q_prefix}{vid_id}",
+                headers={"Referer": f"https://abysscdn.com/?v={cdn_ID}"},
+                stream=True,
+            )
             with open(f"{cdn_ID}.mp4", "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     f.write(chunk)
